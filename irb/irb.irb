@@ -8,4 +8,6 @@ card.balance
 
 card.touch_in("Paddington")
 
-card.entry_station
+card.touch_out("Piccadilly")
+
+card.history

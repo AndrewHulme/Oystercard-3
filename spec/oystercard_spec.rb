@@ -12,8 +12,8 @@ describe Oystercard do
   limit = Oystercard::LIMIT
   min_fare = Oystercard::MIN_FARE
 
-  let(:station) { double() }
-
+  let(:entry_station) { double() }
+  let(:exit_station) { double() }
 
   it "has a balance" do
     expect(subject).to respond_to(:balance)
@@ -40,20 +40,20 @@ describe Oystercard do
     context "balance is" do
       include_context 'above minimum'
       it "checks if in_journey is true if card is touched in" do
-        subject.touch_in(station)
+        subject.touch_in(entry_station)
         expect(subject.in_journey?).to eq true
       end
 
 
       it "remembers entry station" do
-        subject.touch_in(station)
-        expect(subject.entry_station).to eq station
+        subject.touch_in(entry_station)
+        expect(subject.entry_station).to eq entry_station
       end
     end
 
     context "card has less than £#{min_fare}" do
       it "raises an error" do
-        expect { subject.touch_in(station) }.to raise_error("Insufficient balance to travel, at least £#{min_fare} needed.")
+        expect { subject.touch_in(entry_station) }.to raise_error("Insufficient balance to travel, at least £#{min_fare} needed.")
       end
     end
 
@@ -63,20 +63,26 @@ describe Oystercard do
     context "balance is" do
       include_context 'above minimum'
       it "checks if in_journey is false if card is touched out" do
-        subject.touch_in(station)
-        subject.touch_out
+        subject.touch_in(entry_station)
+        subject.touch_out(exit_station)
         expect(subject.in_journey?).to be false
       end
 
+      it 'store journey history' do
+        subject.touch_in(entry_station)
+        subject.touch_out(exit_station)
+        expect(subject.exit_station).to eq(exit_station)
+      end
+
       it "checks if fare for the journey has been deducted from balance" do
-        subject.touch_in(station)
-        expect { subject.touch_out }.to change { subject.balance }.by(-1)
+        subject.touch_in(entry_station)
+        expect { subject.touch_out(exit_station) }.to change { subject.balance }.by(-1)
       end
     end
 
     context "card is touched out" do
       it "raises an error" do
-        expect { subject.touch_out }.to raise_error("Card not touched in")
+        expect { subject.touch_out(exit_station) }.to raise_error("Card not touched in")
       end
     end
   end
@@ -85,19 +91,18 @@ describe Oystercard do
     include_context 'above minimum'
 
     it "forgets entry_station on touch_out" do
-      subject.touch_in(station)
-      subject.touch_out
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
       expect(subject.entry_station).to eq nil
     end
   end
 
-
-
-
-
-
-
-
-
+  #it 'stores journey history on card' do
+  #  journey = {:entry_station => entry_station, :exit_station => exit_station}
+  #  subject.touch_in(entry_station)
+  #  subject.touch_out(exit_station)
+  #  expect(subject.history).to
+  #end
+  #let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
 
 end
