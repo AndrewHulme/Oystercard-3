@@ -15,6 +15,10 @@ describe Oystercard do
   let(:entry_station) { double() }
   let(:exit_station) { double() }
 
+  it 'starts with an empty hash' do
+    expect(subject.history).to be_empty
+  end
+
   it "has a balance" do
     expect(subject).to respond_to(:balance)
   end
@@ -97,12 +101,13 @@ describe Oystercard do
     end
   end
 
-  #it 'stores journey history on card' do
-  #  journey = {:entry_station => entry_station, :exit_station => exit_station}
-  #  subject.touch_in(entry_station)
-  #  subject.touch_out(exit_station)
-  #  expect(subject.history).to
-  #end
+  it 'stores journey history on card' do
+    journey = {:entry_station => entry_station, :exit_station => exit_station}
+    subject.top_up(10)
+    subject.touch_in(entry_station)
+    subject.touch_out(exit_station)
+    expect(subject.history).to include journey
+  end
   #let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
 
 end
