@@ -1,0 +1,11 @@
+require './lib/oystercard'
+
+card = Oystercard.new
+
+card.top_up(50)
+
+card.balance
+
+card.touch_in("Paddington")
+
+card.entry_station
