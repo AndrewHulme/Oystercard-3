@@ -1,5 +1,6 @@
 require './lib/oystercard'
 require './lib/journey'
+require './lib/station'
 
 card = Oystercard.new
 
@@ -12,10 +13,11 @@ card.top_up(50)
 card.balance
 
 card.touch_in("Paddington")
-
+journey.start_journey("Paddington")
 
 card.touch_out("Piccadilly")
-
+journey.finish_journey("Piccadilly")
+card.balance
 
 card.history
 
