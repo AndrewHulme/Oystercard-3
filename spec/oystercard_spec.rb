@@ -14,6 +14,8 @@ describe Oystercard do
 
   let(:entry_station) { double() }
   let(:exit_station) { double() }
+  let(:hibo) { double() }
+  let(:andrew) { double() }
 
   it 'starts with an empty hash' do
     expect(subject.history).to be_empty
@@ -108,6 +110,17 @@ describe Oystercard do
     subject.touch_out(exit_station)
     expect(subject.history).to include journey
   end
+
+  it 'stores multiple journeys in the history of the card' do
+    subject.top_up(10)
+    subject.touch_in(entry_station)
+    subject.touch_out(exit_station)
+
+    subject.touch_in(hibo)
+    subject.touch_out(andrew)
+    expect(subject.history).to eq [{:entry_station => entry_station, :exit_station => exit_station}, {:entry_station => hibo, :exit_station => andrew}]
+  end
+
   #let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
 
 end

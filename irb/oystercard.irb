@@ -11,3 +11,9 @@ card.touch_in("Paddington")
 card.touch_out("Piccadilly")
 
 card.history
+
+card.touch_in("Andrew")
+
+card.touch_out("Hibo")
+
+card.history

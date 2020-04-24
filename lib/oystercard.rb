@@ -5,7 +5,7 @@ class Oystercard
 
   def initialize(balance = 0)
     @balance = balance
-    @history = {}
+    @history = []
   end
 
   def in_journey?
@@ -21,19 +21,17 @@ class Oystercard
   end
 
   def touch_out(station)
-    save_entry
-    in_journey? ? @entry_station = nil : touch_out_error
-    deduct(MIN_FARE)
-    @exit_station = station
-    save_exit
-  end
 
-  def save_entry
-    @history[:entry_station] = @entry_station
-  end
+    if in_journey?
+      @exit_station = station
+      history << {:entry_station => @entry_station, :exit_station => @exit_station}
 
-  def save_exit
-    @history[:exit_station] = @exit_station
+      @entry_station = nil
+      deduct(MIN_FARE)
+    else
+      touch_out_error
+    end
+
   end
 
   private
