@@ -1,3 +1,5 @@
+# require_relative './station'
+
 class Oystercard
   LIMIT = 90
   MIN_FARE = 1

@@ -2,6 +2,10 @@ require './lib/oystercard'
 
 card = Oystercard.new
 
+paddington = Station.new("Paddington", "Zone 1")
+piccadilly = Station.new("Piccadilly", "Zone 2")
+
+
 card.top_up(50)
 
 card.balance
